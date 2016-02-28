@@ -11,6 +11,13 @@
             <form action="LoginCheck.jsp" method="post">
             <br/>Username:<input type="text" name="username">
             <br/>Password:<input type="password" name="password">
+            <br/>
+                <%
+                    Object a=session.getAttribute("wrong");
+                    if (a!=null && a.toString().equals("1")){
+                        %>wrong login or password<%
+                    };
+                %>
             <br/><input type="submit" value="Submit">
             </form>
         </center>

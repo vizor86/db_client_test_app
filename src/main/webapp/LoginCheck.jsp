@@ -10,15 +10,17 @@
         System.out.println(username);
         String password=request.getParameter("password");
         System.out.println(password);
-        if((username.equals("anurag") && password.equals("jain")))
+        if((username.equals("anurag") && password.equals("qwe")))
             {
             System.out.println("OK");
             session.setAttribute("username",username);
+            session.setAttribute("wrong",0);
             response.sendRedirect("Home.jsp");
             }
         else {
             System.out.println("ERROR");
-            response.sendRedirect("Error.jsp");
+            session.setAttribute("wrong",1);
+            response.sendRedirect("index.jsp");
             }
         %>
     </body>

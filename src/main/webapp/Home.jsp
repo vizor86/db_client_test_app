@@ -16,7 +16,7 @@
             <br/>
             <br/>
             <br/><br/><br/><br/><br/>
-        <a href="Logout.jsp">Logout</a>
+        <a href="index.jsp">Logout</a>
         </center>
 
     </body>
