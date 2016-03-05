@@ -9,7 +9,7 @@
         <center>
             <h2>Signup Details</h2>
             <form action="LoginCheck.jsp" method="post">
-            <br/>Username:<input type="text" name="username">
+            <br/>Username:<input type="text" name="userName">
             <br/>Password:<input type="password" name="password">
             <br/>
                 <%

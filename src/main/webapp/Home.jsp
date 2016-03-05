@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" errorPage="Error.jsp"%>
+<jsp:useBean id="user" class="com.mycompany.app.UserData" scope="session"/>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -9,8 +10,7 @@
         <center>
             <h2>
             <%
-            String a=session.getAttribute("username").toString();
-            out.println("Hello  "+a);
+            out.println("Hello  "+user.getUserName());
             %>
             </h2>
             <br/>
