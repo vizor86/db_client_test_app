@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" errorPage="Error.jsp"%>
-<jsp:useBean id="user" class="com.mycompany.app.UserData" scope="session"/>
+<jsp:useBean id="user" class="com.mycompany.app.UserData"  scope="session"/>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -10,7 +10,7 @@
         <center>
             <h2>
             <%
-            out.println("Hello  "+user.getUserName());
+            out.println("Hello  "+user.getLogin());
             %>
             </h2>
             <br/>

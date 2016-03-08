@@ -8,12 +8,13 @@
         <h1>Login Page</h1>
         <center>
             <h2>Signup Details</h2>
-            <form action="LoginCheck.jsp" method="post">
-            <br/>Username:<input type="text" name="userName">
-            <br/>Password:<input type="password" name="password">
+            <form action="j_security_check" method="post">
+            <br/>Username:<input type="text" name="j_username">
+            <br/>Password:<input type="password" name="j_password">
             <br/>
                 <%
                     Object a=session.getAttribute("wrong");
+                    System.out.println((String)a);
                     if (a!=null && a.toString().equals("1")){
                         %>wrong login or password<%
                     };

@@ -1,18 +1,22 @@
 package com.mycompany.app;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dmitriy.martinov on 29.02.2016.
  */
 public class OracleProtocol {
     private Connection jdbcTemplate;
+    private UserData user;
 
     public int login(String userName, String password){
         try {
+            System.out.println("LOGIN: " + userName);
+            System.out.println("PASSWORD: " + password);
             //STEP 4: Execute a query
             System.out.println("Creating statement...");
-            Statement stmt = jdbcTemplate.createStatement();
             String sql = "begin auth_pkg.login(p_user_name => ?," +
                          "                     p_password  => ?," +
                          "                     p_user_id   => ?," +
@@ -28,7 +32,22 @@ public class OracleProtocol {
             int user_id = callstmt.getInt(3);
             int user_role = callstmt.getInt(4);
             System.out.println("USER_ID: " + user_id);
-            stmt.close();
+            callstmt.close();
+
+            sql = "SELECT rght_rght_id rights FROM role_rights WHERE role_id = ?";
+            PreparedStatement pstmt = jdbcTemplate.prepareStatement(sql);
+            pstmt.setInt(1,user_role);
+
+            ResultSet rs = pstmt.executeQuery();
+            int i = 0;
+            ArrayList<Integer> rights = new ArrayList<Integer>();
+            while (rs.next()) {
+                rights.add(rs.getInt("rights"));
+                i++;
+            }
+            pstmt.close();
+
+            user = new UserData(user_id,userName,user_role,rights);
             return user_id;
         }catch (SQLException se) {
             //Handle errors for JDBC
@@ -41,5 +60,9 @@ public class OracleProtocol {
         System.out.println("OracleProtocol constructor init");
         OracleConnector connector = new OracleConnector();
         jdbcTemplate = connector.getConn();
+    }
+
+    public UserData getUser() {
+        return user;
     }
 }

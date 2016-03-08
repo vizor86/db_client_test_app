@@ -1,25 +1,41 @@
 package com.mycompany.app;
 
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Created by dmitriy.martinov on 28.02.2016.
  */
 public class UserData {
-    String userName;
-    String password;
+    String login;
+    int user_id;
+    int role;
+    List<Integer> access_rights;
 
-    public String getUserName() {
-        return userName;
+    public UserData(int user_id, String login, int role, List<Integer> access_rights) {
+        this.user_id = user_id;
+        this.login = login;
+        this.role = role;
+        this.access_rights = access_rights;
+
     }
 
-    public void setUserName(String user) {
-        this.userName = user;
+    public String getLogin() {
+        return login;
     }
 
-    public String getPassword() {
-        return password;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public int getRole() {
+        return role;
+    }
+
+    public List<Integer> getAccess_rights() {
+        return access_rights;
+    }
+
+    public UserData() {
     }
 }

@@ -12,11 +12,30 @@
         <servlet-name>OracleConnector</servlet-name>
         <servlet-class>com.mycompany.app.OracleConnector</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>OracleConnector</servlet-name>
-        <url-pattern>/servlets/servlet/HelloWorldExample</url-pattern>
-    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>private</web-resource-name>
+            <url-pattern>/private/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-role>
+        <role-name>admin</role-name>
+    </security-role>
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>file</realm-name>
+        <form-login-config>
+            <form-login-page>/WEB-INF/private/login.jsp</form-login-page>
+            <form-error-page>/WEB-INF/private/error.jsp</form-error-page>
+        </form-login-config>
+    </login-config>
 </web-app>
