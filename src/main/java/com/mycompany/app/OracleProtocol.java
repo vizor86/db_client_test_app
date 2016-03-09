@@ -11,7 +11,7 @@ public class OracleProtocol {
     private Connection jdbcTemplate;
     private UserData user;
 
-    public int login(String userName, String password){
+    public static int login(String userName, String password, Connection jdbcTemplate){
         try {
             System.out.println("LOGIN: " + userName);
             System.out.println("PASSWORD: " + password);
@@ -33,7 +33,7 @@ public class OracleProtocol {
             int user_role = callstmt.getInt(4);
             System.out.println("USER_ID: " + user_id);
             callstmt.close();
-
+/*
             sql = "SELECT rght_rght_id rights FROM role_rights WHERE role_id = ?";
             PreparedStatement pstmt = jdbcTemplate.prepareStatement(sql);
             pstmt.setInt(1,user_role);
@@ -48,6 +48,7 @@ public class OracleProtocol {
             pstmt.close();
 
             user = new UserData(user_id,userName,user_role,rights);
+*/
             return user_id;
         }catch (SQLException se) {
             //Handle errors for JDBC

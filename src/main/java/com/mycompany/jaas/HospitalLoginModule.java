@@ -1,9 +1,13 @@
-package com.mycompany.app;
+package com.mycompany.jaas;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.mycompany.app.OracleConnector;
+import com.mycompany.app.OracleProtocol;
+import org.apache.log4j.Logger;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -16,6 +20,7 @@ import javax.security.auth.spi.LoginModule;
 
 public class HospitalLoginModule implements LoginModule {
 
+  final static Logger logger = Logger.getLogger(HospitalLoginModule.class);
   private CallbackHandler handler;
   private Subject subject;
   private UserPrincipal userPrincipal;
@@ -23,6 +28,7 @@ public class HospitalLoginModule implements LoginModule {
   private String login;
   private List<String> userGroups;
   private OracleConnector connector;
+
 
   @Override
   public void initialize(Subject subject,
@@ -40,7 +46,7 @@ public class HospitalLoginModule implements LoginModule {
     Callback[] callbacks = new Callback[2];
     callbacks[0] = new NameCallback("login");
     callbacks[1] = new PasswordCallback("password", true);
-    System.out.println("login");
+    logger.debug("login");
     try {
       handler.handle(callbacks);
       String name = ((NameCallback) callbacks[0]).getName();
@@ -53,10 +59,9 @@ public class HospitalLoginModule implements LoginModule {
       // a Web Service, etc.
       // For this tutorial we are just checking if 
       // user is "user123" and password is "pass123"
-      if (name != null &&
-          name.equals("user123") &&
-          password != null &&
-          password.equals("pass123")) {
+      connector = new OracleConnector();
+
+      if (OracleProtocol.login(name,password,connector.getConn())==1) {
 
         // We store the username and roles
         // fetched from the credentials provider
@@ -66,6 +71,7 @@ public class HospitalLoginModule implements LoginModule {
         login = name;
         userGroups = new ArrayList<String>();
         userGroups.add("admin");
+        logger.debug("addGroup is done");
         return true;
       }
 
@@ -82,7 +88,7 @@ public class HospitalLoginModule implements LoginModule {
 
   @Override
   public boolean commit() throws LoginException {
-
+    logger.debug("commit is started");
     userPrincipal = new UserPrincipal(login);
     subject.getPrincipals().add(userPrincipal);
 
@@ -92,7 +98,7 @@ public class HospitalLoginModule implements LoginModule {
         subject.getPrincipals().add(rolePrincipal);
       }
     }
-
+    logger.debug("commit is done");
     return true;
   }
 

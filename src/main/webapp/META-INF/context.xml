@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context reloadable="true">
+    <Realm className="org.apache.catalina.realm.JAASRealm"
+           appName="Hospital"
+           userClassNames="com.mycompany.jaas.UserPrincipal"
+           roleClassNames="com.mycompany.jaas.RolePrincipal" />
+</Context>
