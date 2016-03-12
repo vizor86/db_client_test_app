@@ -17,6 +17,7 @@ import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
+import javax.servlet.http.HttpServletRequest;
 
 public class HospitalLoginModule implements LoginModule {
 
@@ -38,6 +39,7 @@ public class HospitalLoginModule implements LoginModule {
 
     handler = callbackHandler;
     this.subject = subject;
+    connector = new OracleConnector();
   }
 
   @Override
@@ -47,6 +49,7 @@ public class HospitalLoginModule implements LoginModule {
     callbacks[0] = new NameCallback("login");
     callbacks[1] = new PasswordCallback("password", true);
     logger.debug("login");
+
     try {
       handler.handle(callbacks);
       String name = ((NameCallback) callbacks[0]).getName();
@@ -59,7 +62,6 @@ public class HospitalLoginModule implements LoginModule {
       // a Web Service, etc.
       // For this tutorial we are just checking if 
       // user is "user123" and password is "pass123"
-      connector = new OracleConnector();
 
       if (OracleProtocol.login(name,password,connector.getConn())==1) {
 

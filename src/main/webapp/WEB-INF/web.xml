@@ -10,19 +10,19 @@
     <display-name>Hospital test application</display-name>
 
     <servlet>
-        <servlet-name>MainController</servlet-name>
-        <servlet-class>com.mycompany.app.MainController</servlet-class>
+        <servlet-name>AdminController</servlet-name>
+        <servlet-class>com.mycompany.app.AdminController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>MainController</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-name>AdminController</servlet-name>
+        <url-pattern>/admin/*</url-pattern>
     </servlet-mapping>
 
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>private</web-resource-name>
-            <url-pattern>/*</url-pattern>
+            <web-resource-name>admin</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
         </web-resource-collection>

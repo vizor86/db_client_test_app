@@ -3,6 +3,7 @@ package com.mycompany.app;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * Created by dmitriy.martinov on 29.02.2016.
@@ -10,13 +11,15 @@ import java.util.List;
 public class OracleProtocol {
     private Connection jdbcTemplate;
     private UserData user;
+    final static Logger logger = Logger.getLogger(OracleProtocol.class);
 
     public static int login(String userName, String password, Connection jdbcTemplate){
+
         try {
-            System.out.println("LOGIN: " + userName);
-            System.out.println("PASSWORD: " + password);
+            logger.debug("LOGIN: " + userName);
+            logger.debug("PASSWORD: " + password);
             //STEP 4: Execute a query
-            System.out.println("Creating statement...");
+            logger.debug("Creating statement...");
             String sql = "begin auth_pkg.login(p_user_name => ?," +
                          "                     p_password  => ?," +
                          "                     p_user_id   => ?," +
@@ -31,7 +34,7 @@ public class OracleProtocol {
 
             int user_id = callstmt.getInt(3);
             int user_role = callstmt.getInt(4);
-            System.out.println("USER_ID: " + user_id);
+            logger.debug("USER_ID: " + user_id);
             callstmt.close();
 /*
             sql = "SELECT rght_rght_id rights FROM role_rights WHERE role_id = ?";
@@ -55,6 +58,32 @@ public class OracleProtocol {
             se.printStackTrace();
         }
         return 0;
+    }
+
+    public static ArrayList<User> getUsers(Connection jdbcTemplate){
+        try {
+            String sql = "SELECT u.user_id,u.login,u.role_role_id,r.name " +
+                         " FROM users u,roles r where u.role_role_id=r.role_id" +
+                         " ORDER BY u.user_id";
+            Statement stmt = jdbcTemplate.createStatement();
+            logger.debug(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+            ArrayList<User> users = new ArrayList<User>();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("user_id"));
+                user.setLogin(rs.getString("login"));
+                user.setRole(rs.getString("name"));
+                user.setRoleId(rs.getInt("role_role_id"));
+                users.add(user);
+            }
+            stmt.close();
+            return users;
+        }catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+            return null;
+        }
     }
 
     public OracleProtocol() {

@@ -5,6 +5,8 @@
 package com.mycompany.app;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.ServletException;
@@ -17,20 +19,23 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
-@WebServlet(name = "MainController")
-@ServletSecurity( @HttpConstraint(rolesAllowed = {"private"}) )
-public class MainController extends HttpServlet {
-    final static Logger logger = Logger.getLogger(MainController.class);
+@WebServlet(name = "AdminController")
+@ServletSecurity( @HttpConstraint(rolesAllowed = {"admin"}) )
+public class AdminController extends HttpServlet {
+    OracleConnector jdbcTemplate;
+    final static Logger logger = Logger.getLogger(AdminController.class);
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.debug("private controller started");
         response.setContentType("text/html;charset=UTF-8");
         logger.debug(request.getServletPath());
-        if ("/private".equals(request.getServletPath())){
-            logger.debug("/private");
+        if ("/admin".equals(request.getServletPath())){
+            Connection conn = (Connection) request.getSession().getAttribute("connection");
+            ArrayList<User> users = OracleProtocol.getUsers(conn);
+            request.setAttribute("users", users);
             request.setAttribute("name", request.getUserPrincipal().getName());
-            request.getRequestDispatcher("WEB-INF/private/private_article.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/admin/admin.jsp").forward(request, response);
         }else
         if ("/logout".equals(request.getServletPath())){
             logger.debug("/logout");
@@ -38,15 +43,7 @@ public class MainController extends HttpServlet {
             if (session!= null){
                 session.invalidate();
             }
-            response.sendRedirect("WEB-INF/");
-        }
-        else{
-            logger.debug("/*");
-            HttpSession session = request.getSession(false);
-            if (session!= null){
-                session.invalidate();
-            }
-            response.sendRedirect("WEB-INF/");
+            response.sendRedirect("admin");
         }
 
     }
